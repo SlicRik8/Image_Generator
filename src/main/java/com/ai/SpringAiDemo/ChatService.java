@@ -44,7 +44,7 @@ public class ChatService {
         //body
         Map<String,Object> body = Map.of(
                 "model",model,
-                "temperature",temperature,
+                "temperature",temperature, //temp controls the randomness of a models output/ creativity
                 "messages", List.of(
                         Map.of("role","user","content",prompt)
                 )
