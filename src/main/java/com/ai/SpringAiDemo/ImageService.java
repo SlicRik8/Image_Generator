@@ -25,15 +25,25 @@ public class ImageService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String generateImage(String prompt){
+    public String generateImage(String prompt,int steps,double guidanceScale,int width,int height){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization","Bearer "+hfApiKey);
         headers.setAccept(List.of(MediaType.IMAGE_JPEG));
 
 
+        Map<String,Object> parameters = Map.of(
+                "num_inference_steps",steps,
+                "guidance_scale",guidanceScale,
+                "width",width,
+                "height",height
+        );
+
+
         //body
-        Map<String,Object> body = Map.of("inputs",prompt);
+        Map<String,Object> body = Map.of(
+                "inputs",prompt,
+                "parameters",parameters);
 
 
         //call

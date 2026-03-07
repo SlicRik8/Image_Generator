@@ -12,6 +12,7 @@ public class GenAIController {
 
     private final ChatService chatService;
     private final ImageService imageService;
+    private final RecipeService recipeService;
 
     @GetMapping("ask-ai")
     public String getResponse(@RequestParam String prompt){
@@ -26,8 +27,21 @@ public class GenAIController {
 
 
     @GetMapping("generate-image")
-    public String generateImage(@RequestParam String prompt){
-        return imageService.generateImage(prompt);
+    public String generateImage(@RequestParam String prompt,
+                                @RequestParam(defaultValue= "30") int steps,
+                                @RequestParam(defaultValue = "7.5") double guidanceScale,
+                                @RequestParam(defaultValue = "1024") int width,
+                                @RequestParam(defaultValue = "1024") int height
+    ){
+        return imageService.generateImage(prompt,steps,guidanceScale,width,height);
+    }
+
+    @GetMapping("create-recipe")
+    public String createRecipe(@RequestParam String ingredients,
+                               @RequestParam String cuisine,
+                               @RequestParam String dietaryRestrictions){
+        return recipeService.createRecipe(ingredients,cuisine,dietaryRestrictions);
+
     }
 
 
