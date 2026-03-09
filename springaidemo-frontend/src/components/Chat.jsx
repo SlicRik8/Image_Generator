@@ -1,55 +1,70 @@
 import axios from "axios";
 import { useState } from "react";
 
-function Chat(){
+function Chat() {
+  const [prompt, setPrompt] = useState('');
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
 
-
-    const [prompt,setPrompt] = useState('');
-    const [chatResponse,setChatResponse] = useState('');
-    const[loading,setLoading] = useState(false);
-
-
-    const askAI = async()=> {
-        try{
-            setLoading(true);
-            const response = await axios.get(`http://localhost:8080/ask-ai-options?prompt=${prompt}`)
-            const data = response.data;
-            console.log(data);
-            
-            setChatResponse(data);
-
-        }catch(error){
-            console.error("Error generating response : ",error);
-        }finally{
-            setLoading(false);
-        }
+  const askAI = async () => {
+    try {
+      setLoading(true);
+      setResponse('');
+      const res = await axios.get(`http://localhost:8080/ask-ai-options?prompt=${prompt}`);
+      setResponse(res.data);
+    } catch (error) {
+      console.error("Error generating response: ", error);
+    } finally {
+      setLoading(false);
     }
+  }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !loading && prompt) askAI();
+  }
 
-    return(
+  return (
+    <div className="flex flex-col gap-4 h-[75vh]">
+      <h2 className="text-3xl font-bold tracking-tight">Ask AI</h2>
+      <p className="text-gray-500 text-sm -mt-2">Ask a question and get an instant response</p>
 
-        <>
-        <div className="flex flex-col items-center gap-6 p-6">
-            <h2 className="text-5xl font-bold">Talk to AI</h2>
-            <input className="w-full max-w-lg p-3 rounded-xl border border-gray-300 text-base text-gray-300 focus:outline-none"
-                type="text"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)} 
-                placeholder="Enter a Prompt for AI"
-                />
+    
+      <div className="flex-1 bg-gray-900 border border-gray-800 rounded-2xl p-6 overflow-y-auto">
+        {!response && !loading && (
+          <div className="h-full flex items-center justify-center text-gray-600 text-sm">
+            Ask something to get started...
+          </div>
+        )}
+        {loading && (
+          <div className="h-full flex items-center justify-center text-gray-500 text-sm animate-pulse">
+            Thinking...
+          </div>
+        )}
+        {response && (
+          <p className="text-gray-200 text-sm leading-relaxed">{response}</p>
+        )}
+      </div>
 
-                <button onClick={askAI} disabled = {loading || !prompt} className="px-4 py-2 text-base bg-blue-600 text-white rounded-xl cursor-pointer">
-                    {loading ? "Please Wait":"Ask AI"}
-                    </button>
+      
+      <div className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-full px-5 py-3">
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Ask me anything..."
+          className="flex-1 text-sm text-white placeholder-gray-500 focus:outline-none bg-transparent"
+        />
+        <button
+          onClick={askAI}
+          disabled={loading || !prompt}
+          className="px-5 py-2 bg-white text-black text-sm font-semibold rounded-full cursor-pointer hover:bg-gray-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+          Send
+        </button>
+      </div>
 
-                {chatResponse &&(
-                <div className="w-full max-w-[700px] bg-gray-400 rounded-xl p-4 text-left text-black text-sm">
-                    <p>{chatResponse}</p>
-                </div>
-)}
-        </div>
-        </>
-    )
+    </div>
+  )
 }
 
 export default Chat;

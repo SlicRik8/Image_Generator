@@ -3,34 +3,40 @@ import ImageGenerator from "./components/ImageGenerator";
 import Chat from "./components/Chat";
 import RecipeGenerator from "./components/RecipeGenerator";
 
-
-
 function App() {
-
   const [activeTab, setActiveTab] = useState('image-generator');
 
-
-  const handleTabChange = (tab) => {
-   
-    setActiveTab(tab);
-  }
-
-
   return (
-    <div className="min-h-screen bg-black">
-      <div className="flex justify-center">
-        <button className={`p-2 mx-2 mt-10 rounded-2xl cursor-pointer text-white ${activeTab === 'image-generator' ? 'bg-blue-600' : 'bg-slate-900'}`} onClick={() => handleTabChange('image-generator')}>Image Generator</button>
-        <button className={`p-2 mx-2 mt-10 rounded-2xl cursor-pointer text-white ${activeTab === 'chat' ? 'bg-blue-600' : 'bg-slate-900'}`} onClick={() => handleTabChange('chat')}>Ask AI</button>
-        <button className={`p-2 mx-2 mt-10 rounded-2xl cursor-pointer text-white ${activeTab === 'recipe-generator' ? 'bg-blue-600' : 'bg-slate-900'}`} onClick={() => handleTabChange('recipe-generator')}>Recipe Generator</button>
+    <div className="min-h-screen bg-black text-white">
+      
+   
+      <div className="flex items-center justify-between px-10 py-5 border-b border-gray-800">
+        <h1 className="text-xl font-bold tracking-widest  text-white">✦ Brainrot.ai</h1>
 
-
+        <div className="flex gap-2">
+          {[
+            { id: 'image-generator', label: 'Image Generator' },
+            { id: 'chat', label: 'Ask AI' },
+            { id: 'recipe-generator', label: 'Recipe Generator' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
+                ${activeTab === tab.id
+                  ? 'bg-white text-black'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                }`}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-
-
-      <div className="text-white text-5xl font-bold text-center mt-2">
-        {activeTab === 'image-generator' && <ImageGenerator/>}
-        {activeTab === 'chat' && <Chat/>}
+     
+      <div className="max-w-4xl mx-auto mt-10 px-6">
+        {activeTab === 'image-generator' && <ImageGenerator />}
+        {activeTab === 'chat' && <Chat />}
         {activeTab === 'recipe-generator' && <RecipeGenerator />}
       </div>
 
