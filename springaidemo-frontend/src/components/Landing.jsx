@@ -18,12 +18,15 @@ function Landing({ setActiveTab }) {
 
         <div className="mt-9 flex flex-wrap gap-3">
           <button
+            type="button"
             onClick={() => setActiveTab("image-generator")}
             className="rounded-full bg-[#15120f] px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5"
           >
             Start creating
           </button>
+
           <button
+            type="button"
             onClick={() => setActiveTab("chat")}
             className="rounded-full border border-[#15120f]/15 bg-white/70 px-6 py-3 text-sm font-medium text-[#15120f] transition hover:-translate-y-0.5 hover:bg-white"
           >
@@ -56,10 +59,7 @@ function Landing({ setActiveTab }) {
               ["Chat", "Think through ideas fast."],
               ["Recipes", "Cook with what you have."],
             ].map(([title, text]) => (
-              <div
-                key={title}
-                className="rounded-3xl border border-[#15120f]/10 bg-white p-4"
-              >
+              <div key={title} className="rounded-3xl border border-[#15120f]/10 bg-white p-4">
                 <h4 className="font-medium">{title}</h4>
                 <p className="mt-2 text-sm leading-5 text-[#75695e]">{text}</p>
               </div>

@@ -6,23 +6,30 @@ function Chat() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const askAI = async () => {
+  const askAI = async (e) => {
+    e?.preventDefault();
+
     try {
       setLoading(true);
       setResponse("");
+
       const res = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/ask-ai-options?prompt=${prompt}`
+        `${import.meta.env.VITE_API_BASE_URL}/ask-ai-options?prompt=${encodeURIComponent(prompt)}`
       );
+
       setResponse(res.data);
     } catch (error) {
       console.error("Error generating response: ", error);
+      alert("Chat request failed. Check backend logs or browser console.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !loading && prompt) askAI();
+    if (e.key === "Enter" && !loading && prompt.trim()) {
+      askAI(e);
+    }
   };
 
   return (
@@ -54,7 +61,7 @@ function Chat() {
             )}
 
             {response && (
-              <div className="max-w-2xl rounded-[2rem] bg-[#15120f] px-6 py-5 text-sm leading-7 text-[#fffaf2]">
+              <div className="max-w-2xl rounded-[2rem] bg-[#15120f] px-6 py-5 text-sm leading-7 text-[#fffaf2] whitespace-pre-wrap">
                 {response}
               </div>
             )}
@@ -71,8 +78,9 @@ function Chat() {
             />
 
             <button
+              type="button"
               onClick={askAI}
-              disabled={loading || !prompt}
+              disabled={loading || !prompt.trim()}
               className="rounded-full bg-[#15120f] px-6 py-2.5 text-sm font-medium text-white transition hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0"
             >
               Send

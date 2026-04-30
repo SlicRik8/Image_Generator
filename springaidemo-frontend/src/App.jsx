@@ -18,7 +18,7 @@ function App() {
     <div className="min-h-screen bg-[#f4efe7] text-[#15120f]">
       <header className="sticky top-0 z-50 border-b border-[#15120f]/10 bg-[#f4efe7]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <button onClick={() => setActiveTab("home")} className="text-left">
+          <button type="button" onClick={() => setActiveTab("home")} className="text-left">
             <h1 className="font-serif text-2xl italic tracking-tight">Imagine</h1>
             <p className="text-xs uppercase tracking-[0.25em] text-[#8c6f4f]">
               Creative tools
@@ -28,6 +28,7 @@ function App() {
           <nav className="flex gap-2 rounded-full bg-[#15120f]/5 p-1">
             {tabs.map((tab) => (
               <button
+                type="button"
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`rounded-full px-4 py-2 text-sm transition ${

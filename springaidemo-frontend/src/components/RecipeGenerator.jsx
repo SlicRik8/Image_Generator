@@ -9,15 +9,24 @@ function RecipeGenerator() {
   const [recipe, setRecipe] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const createRecipe = async () => {
+  const createRecipe = async (e) => {
+    e?.preventDefault();
+
     try {
       setLoading(true);
+
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/create-recipe?ingredients=${ingredients}&cuisine=${cuisine}&dietaryRestrictions=${dietaryRestrictions}`
+        `${import.meta.env.VITE_API_BASE_URL}/create-recipe?ingredients=${encodeURIComponent(
+          ingredients
+        )}&cuisine=${encodeURIComponent(cuisine)}&dietaryRestrictions=${encodeURIComponent(
+          dietaryRestrictions
+        )}`
       );
+
       setRecipe(response.data);
     } catch (error) {
       console.error("Error generating recipe: ", error);
+      alert("Recipe request failed. Check backend logs or browser console.");
     } finally {
       setLoading(false);
     }
@@ -70,8 +79,9 @@ function RecipeGenerator() {
           </div>
 
           <button
+            type="button"
             onClick={createRecipe}
-            disabled={loading || !ingredients}
+            disabled={loading || !ingredients.trim()}
             className="rounded-full bg-[#15120f] px-7 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0"
           >
             {loading ? "Cooking it up..." : "Make recipe"}

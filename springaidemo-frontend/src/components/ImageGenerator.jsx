@@ -6,17 +6,22 @@ function ImageGenerator() {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const generateImage = async () => {
+  const generateImage = async (e) => {
+    e?.preventDefault();
+
     try {
       setLoading(true);
       setImage(null);
+
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/generate-image?prompt=${prompt}`,
+        `${import.meta.env.VITE_API_BASE_URL}/generate-image?prompt=${encodeURIComponent(prompt)}`,
         { responseType: "text" }
       );
+
       setImage(`data:image/jpeg;base64,${response.data}`);
     } catch (error) {
       console.error("Error generating image: ", error);
+      alert("Image generation failed. Check backend logs or browser console.");
     } finally {
       setLoading(false);
     }
@@ -46,6 +51,7 @@ function ImageGenerator() {
           />
 
           <button
+            type="button"
             onClick={generateImage}
             disabled={loading || !prompt.trim()}
             className="mt-4 rounded-full bg-[#15120f] px-7 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0"
