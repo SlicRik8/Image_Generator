@@ -3,90 +3,107 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 function RecipeGenerator() {
-  const [ingredients, setIngredients] = useState('');
-  const [cuisine, setCuisine] = useState('');
-  const [dietaryRestrictions, setDietaryRestrictions] = useState('');
-  const [recipe, setRecipe] = useState('');
+  const [ingredients, setIngredients] = useState("");
+  const [cuisine, setCuisine] = useState("");
+  const [dietaryRestrictions, setDietaryRestrictions] = useState("");
+  const [recipe, setRecipe] = useState("");
   const [loading, setLoading] = useState(false);
 
   const createRecipe = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8080/create-recipe?ingredients=${ingredients}&cuisine=${cuisine}&dietaryRestrictions=${dietaryRestrictions}`);
+      const response = await axios.get(
+        `http://localhost:8080/create-recipe?ingredients=${ingredients}&cuisine=${cuisine}&dietaryRestrictions=${dietaryRestrictions}`
+      );
       setRecipe(response.data);
     } catch (error) {
       console.error("Error generating recipe: ", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-3xl font-bold tracking-tight">Recipe Generator</h2>
-      <p className="text-gray-500 text-sm -mt-2">Tell us what you have and we'll do the rest</p>
+    <section className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+      <div className="pt-8">
+        <p className="mb-4 text-sm text-[#8c6f4f]">Recipe tool</p>
+        <h2 className="font-serif text-6xl leading-none tracking-tight">
+          What can I cook?
+        </h2>
+        <p className="mt-5 max-w-md text-lg leading-8 text-[#63584e]">
+          Drop in whatever is in your kitchen and get something that actually
+          sounds worth making.
+        </p>
 
-      <div className="flex gap-6 mt-4">
+        <div className="mt-10 space-y-5">
+          <div>
+            <label className="text-sm text-[#6f604f]">Ingredients</label>
+            <input
+              className="mt-2 w-full rounded-full border border-[#15120f]/10 bg-white/70 px-5 py-4 text-sm text-[#15120f] outline-none transition focus:border-[#15120f]/30 focus:bg-white"
+              type="text"
+              value={ingredients}
+              onChange={(e) => setIngredients(e.target.value)}
+              placeholder="tomato, onion, cheese..."
+            />
+          </div>
 
-        
-        <div className="w-2/5 bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col gap-4">
-          <label className="text-sm text-gray-400 font-medium">Ingredients</label>
-          <input
-            className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 transition-all"
-            type="text"
-            value={ingredients}
-            onChange={(e) => setIngredients(e.target.value)}
-            placeholder="tomato, onion, cheese..."
-          />
+          <div>
+            <label className="text-sm text-[#6f604f]">Cuisine</label>
+            <input
+              className="mt-2 w-full rounded-full border border-[#15120f]/10 bg-white/70 px-5 py-4 text-sm text-[#15120f] outline-none transition focus:border-[#15120f]/30 focus:bg-white"
+              type="text"
+              value={cuisine}
+              onChange={(e) => setCuisine(e.target.value)}
+              placeholder="Indian, Italian, Thai..."
+            />
+          </div>
 
-          <label className="text-sm text-gray-400 font-medium">Cuisine Type</label>
-          <input
-            className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 transition-all"
-            type="text"
-            value={cuisine}
-            onChange={(e) => setCuisine(e.target.value)}
-            placeholder="Italian, Indian, Continental..."
-          />
-
-          <label className="text-sm text-gray-400 font-medium">Dietary Restrictions</label>
-          <input
-            className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 transition-all"
-            type="text"
-            value={dietaryRestrictions}
-            onChange={(e) => setDietaryRestrictions(e.target.value)}
-            placeholder="gluten-free, vegan, none..."
-          />
+          <div>
+            <label className="text-sm text-[#6f604f]">Dietary notes</label>
+            <input
+              className="mt-2 w-full rounded-full border border-[#15120f]/10 bg-white/70 px-5 py-4 text-sm text-[#15120f] outline-none transition focus:border-[#15120f]/30 focus:bg-white"
+              type="text"
+              value={dietaryRestrictions}
+              onChange={(e) => setDietaryRestrictions(e.target.value)}
+              placeholder="vegan, high protein, no nuts..."
+            />
+          </div>
 
           <button
             onClick={createRecipe}
             disabled={loading || !ingredients}
-            className="w-full mt-2 py-3 bg-white text-black text-sm font-semibold rounded-full cursor-pointer hover:bg-gray-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-            {loading ? "Creating Recipe..." : "Create Recipe"}
+            className="rounded-full bg-[#15120f] px-7 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0"
+          >
+            {loading ? "Cooking it up..." : "Make recipe"}
           </button>
         </div>
+      </div>
 
-        
-        <div className="w-3/5">
+      <div className="relative pt-10">
+        <div className="absolute right-10 top-0 h-64 w-64 rounded-full bg-[#d8a15f]/25 blur-3xl" />
+
+        <div className="relative rounded-[3rem] bg-[#fffaf2] p-5 shadow-[0_30px_90px_rgba(40,30,20,0.12)] -rotate-1">
           {loading && (
-            <div className="w-full h-full min-h-96 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 text-sm animate-pulse">
-              Cooking up your recipe...
+            <div className="flex min-h-[560px] items-center justify-center rounded-[2.5rem] bg-white/70 text-sm text-[#8d8176]">
+              Writing your recipe...
             </div>
           )}
+
           {recipe && (
-            <div className="w-full h-full bg-gray-900 border border-gray-800 rounded-2xl p-6 text-gray-200 text-sm leading-relaxed overflow-y-auto [scrollbar-width:none] prose prose-invert max-h-[600px]">
+            <div className="min-h-[560px] max-h-[620px] overflow-y-auto rounded-[2.5rem] bg-white/80 p-8 text-sm leading-7 text-[#3d352e] [scrollbar-width:none] prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-[#15120f] prose-strong:text-[#15120f]">
               <ReactMarkdown>{recipe}</ReactMarkdown>
             </div>
           )}
+
           {!recipe && !loading && (
-            <div className="w-full h-full min-h-96 rounded-2xl border border-dashed border-gray-800 flex items-center justify-center text-gray-600 text-sm">
-              Your recipe will appear here
+            <div className="flex min-h-[560px] items-center justify-center rounded-[2.5rem] border border-dashed border-[#15120f]/15 bg-[#f4efe7] text-sm text-[#8d8176]">
+              Your recipe will show up here
             </div>
           )}
         </div>
-
       </div>
-    </div>
-  )
+    </section>
+  );
 }
 
 export default RecipeGenerator;

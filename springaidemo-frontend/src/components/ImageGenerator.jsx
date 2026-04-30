@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 function ImageGenerator() {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -10,75 +10,84 @@ function ImageGenerator() {
     try {
       setLoading(true);
       setImage(null);
-      const response = await axios.get(`http://localhost:8080/generate-image?prompt=${prompt}`, {
-        responseType: 'text'
-      });
+      const response = await axios.get(
+        `http://localhost:8080/generate-image?prompt=${prompt}`,
+        { responseType: "text" }
+      );
       setImage(`data:image/jpeg;base64,${response.data}`);
     } catch (error) {
       console.error("Error generating image: ", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-3xl font-bold tracking-tight">Image Generator</h2>
-      <p className="text-gray-500 text-sm -mt-2">Describe anything and watch it come to life</p>
+    <section className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="pt-8">
+        <p className="mb-4 text-sm text-[#8c6f4f]">Image tool</p>
+        <h2 className="font-serif text-6xl leading-none tracking-tight">
+          Make an image.
+        </h2>
+        <p className="mt-5 max-w-md text-lg leading-8 text-[#63584e]">
+          Describe what you want. Keep it loose, specific, weird, cinematic —
+          whatever fits.
+        </p>
 
-      <div className="flex gap-6 mt-4">
+        <div className="mt-10 max-w-lg">
+          <label className="text-sm text-[#6f604f]">Your prompt</label>
 
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="A moody coffee shop at night, rain on the windows, warm lamps..."
+            rows={8}
+            className="mt-3 w-full resize-none rounded-[2rem] border border-[#15120f]/10 bg-white/70 p-5 text-sm leading-6 text-[#15120f] shadow-sm outline-none transition focus:border-[#15120f]/30 focus:bg-white"
+          />
 
-        <div className="flex flex-col gap-4 w-2/5">
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col gap-4">
-            <label className="text-sm text-gray-400 font-medium">Prompt</label>
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="A futuristic city at sunset, cinematic lighting..."
-              rows={5}
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 resize-none transition-all"
-            />
-            <button
-              onClick={generateImage}
-              disabled={loading || !prompt.trim()}
-              className="w-full py-3 bg-white text-black text-sm font-semibold rounded-full cursor-pointer hover:bg-gray-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-              {loading ? "Generating..." : "Generate Image"}
-            </button>
-          </div>
-
-          
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-            <p className="text-gray-400 text-xs font-medium mb-3">Prompt Tips</p>
-            <ul className="text-gray-500 text-xs flex flex-col gap-2">
-              <li>— Be descriptive and specific</li>
-              <li>— Mention lighting (e.g. golden hour)</li>
-              <li>— Add art style (e.g. photorealistic)</li>
-              <li>— Include mood or atmosphere</li>
-            </ul>
-          </div>
+          <button
+            onClick={generateImage}
+            disabled={loading || !prompt.trim()}
+            className="mt-4 rounded-full bg-[#15120f] px-7 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0"
+          >
+            {loading ? "Making it..." : "Generate"}
+          </button>
         </div>
 
-        
-        <div className="w-3/5">
-          {loading && (
-            <div className="w-full h-full min-h-96 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 text-sm animate-pulse">
-              Generating your image...
-            </div>
-          )}
-          {image && (
-            <img src={image} alt="Generated" className="rounded-2xl w-full border border-gray-800 shadow-lg" />
-          )}
-          {!image && !loading && (
-            <div className="w-full h-full min-h-96 rounded-2xl border border-dashed border-gray-800 flex items-center justify-center text-gray-600 text-sm">
-              Your image will appear here
-            </div>
-          )}
+        <div className="mt-12 max-w-sm border-l border-[#15120f]/15 pl-5 text-sm leading-7 text-[#75695e]">
+          Try adding light, camera angle, place, mood, material, and a little
+          imperfection. That usually makes it feel less generic.
         </div>
-
       </div>
-    </div>
-  )
+
+      <div className="relative min-h-[620px]">
+        <div className="absolute right-4 top-8 h-64 w-64 rounded-full bg-[#d8a15f]/30 blur-3xl" />
+        <div className="absolute bottom-10 left-0 h-72 w-72 rounded-full bg-[#809671]/20 blur-3xl" />
+
+        <div className="relative mt-8 rounded-[3rem] bg-[#fffaf2] p-4 shadow-[0_30px_90px_rgba(40,30,20,0.14)] rotate-1">
+          {loading && (
+            <div className="flex min-h-[560px] items-center justify-center rounded-[2.5rem] bg-[#15120f] text-sm text-white/60">
+              Working on it...
+            </div>
+          )}
+
+          {image && (
+            <img
+              src={image}
+              alt="Generated"
+              className="min-h-[560px] w-full rounded-[2.5rem] object-cover"
+            />
+          )}
+
+          {!image && !loading && (
+            <div className="flex min-h-[560px] items-center justify-center rounded-[2.5rem] border border-dashed border-[#15120f]/15 bg-[#f4efe7] text-sm text-[#8d8176]">
+              Image preview lands here
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default ImageGenerator;

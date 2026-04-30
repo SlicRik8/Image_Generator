@@ -2,69 +2,86 @@ import axios from "axios";
 import { useState } from "react";
 
 function Chat() {
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
   const askAI = async () => {
     try {
       setLoading(true);
-      setResponse('');
-      const res = await axios.get(`http://localhost:8080/ask-ai-options?prompt=${prompt}`);
+      setResponse("");
+      const res = await axios.get(
+        `http://localhost:8080/ask-ai-options?prompt=${prompt}`
+      );
       setResponse(res.data);
     } catch (error) {
       console.error("Error generating response: ", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !loading && prompt) askAI();
-  }
+    if (e.key === "Enter" && !loading && prompt) askAI();
+  };
 
   return (
-    <div className="flex flex-col gap-4 h-[75vh]">
-      <h2 className="text-3xl font-bold tracking-tight">Ask AI</h2>
-      <p className="text-gray-500 text-sm -mt-2">Ask a question and get an instant response</p>
-
-    
-      <div className="flex-1 bg-gray-900 border border-gray-800 rounded-2xl p-6 overflow-y-auto">
-        {!response && !loading && (
-          <div className="h-full flex items-center justify-center text-gray-600 text-sm">
-            Ask something to get started...
-          </div>
-        )}
-        {loading && (
-          <div className="h-full flex items-center justify-center text-gray-500 text-sm animate-pulse">
-            Thinking...
-          </div>
-        )}
-        {response && (
-          <p className="text-gray-200 text-sm leading-relaxed">{response}</p>
-        )}
+    <section className="mx-auto max-w-4xl py-8">
+      <div className="mb-10">
+        <p className="mb-4 text-sm text-[#8c6f4f]">Chat tool</p>
+        <h2 className="font-serif text-6xl leading-none tracking-tight">
+          Ask anything.
+        </h2>
+        <p className="mt-5 max-w-xl text-lg leading-8 text-[#63584e]">
+          A clean little space for questions, ideas, rewrites, plans, and random
+          thoughts.
+        </p>
       </div>
 
-      
-      <div className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-full px-5 py-3">
-        <input
-          type="text"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask me anything..."
-          className="flex-1 text-sm text-white placeholder-gray-500 focus:outline-none bg-transparent"
-        />
-        <button
-          onClick={askAI}
-          disabled={loading || !prompt}
-          className="px-5 py-2 bg-white text-black text-sm font-semibold rounded-full cursor-pointer hover:bg-gray-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-          Send
-        </button>
-      </div>
+      <div className="min-h-[460px] rounded-[3rem] bg-[#fffaf2] p-5 shadow-[0_30px_90px_rgba(40,30,20,0.12)]">
+        <div className="flex min-h-[420px] flex-col rounded-[2.5rem] bg-white/70 p-6">
+          <div className="flex-1 overflow-y-auto">
+            {!response && !loading && (
+              <div className="flex h-full items-center justify-center text-sm text-[#8d8176]">
+                Ask something to get started
+              </div>
+            )}
 
-    </div>
-  )
+            {loading && (
+              <div className="flex h-full items-center justify-center text-sm text-[#8d8176]">
+                Thinking...
+              </div>
+            )}
+
+            {response && (
+              <div className="max-w-2xl rounded-[2rem] bg-[#15120f] px-6 py-5 text-sm leading-7 text-[#fffaf2]">
+                {response}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-5 flex items-center gap-3 rounded-full border border-[#15120f]/10 bg-[#f4efe7] px-4 py-3">
+            <input
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your question..."
+              className="flex-1 bg-transparent px-2 text-sm text-[#15120f] placeholder-[#8d8176] outline-none"
+            />
+
+            <button
+              onClick={askAI}
+              disabled={loading || !prompt}
+              className="rounded-full bg-[#15120f] px-6 py-2.5 text-sm font-medium text-white transition hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Chat;

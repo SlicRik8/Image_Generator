@@ -1,47 +1,56 @@
-import { useState } from "react"
+import { useState } from "react";
+import Landing from "./components/Landing";
 import ImageGenerator from "./components/ImageGenerator";
 import Chat from "./components/Chat";
 import RecipeGenerator from "./components/RecipeGenerator";
 
 function App() {
-  const [activeTab, setActiveTab] = useState('image-generator');
+  const [activeTab, setActiveTab] = useState("home");
+
+  const tabs = [
+    { id: "home", label: "Home" },
+    { id: "image-generator", label: "Images" },
+    { id: "chat", label: "Chat" },
+    { id: "recipe-generator", label: "Recipes" },
+  ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      
-   
-      <div className="flex items-center justify-between px-10 py-5 border-b border-gray-800">
-        <h1 className="text-xl font-bold tracking-widest  text-white">✦ Brainrot.ai</h1>
+    <div className="min-h-screen bg-[#f4efe7] text-[#15120f]">
+      <header className="sticky top-0 z-50 border-b border-[#15120f]/10 bg-[#f4efe7]/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <button onClick={() => setActiveTab("home")} className="text-left">
+            <h1 className="font-serif text-2xl italic tracking-tight">Imagine</h1>
+            <p className="text-xs uppercase tracking-[0.25em] text-[#8c6f4f]">
+              Creative tools
+            </p>
+          </button>
 
-        <div className="flex gap-2">
-          {[
-            { id: 'image-generator', label: 'Image Generator' },
-            { id: 'chat', label: 'Ask AI' },
-            { id: 'recipe-generator', label: 'Recipe Generator' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
-                ${activeTab === tab.id
-                  ? 'bg-white text-black'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                }`}>
-              {tab.label}
-            </button>
-          ))}
+          <nav className="flex gap-2 rounded-full bg-[#15120f]/5 p-1">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`rounded-full px-4 py-2 text-sm transition ${
+                  activeTab === tab.id
+                    ? "bg-[#15120f] text-white shadow-sm"
+                    : "text-[#5f554c] hover:bg-white"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
         </div>
-      </div>
+      </header>
 
-     
-      <div className="max-w-4xl mx-auto mt-10 px-6">
-        {activeTab === 'image-generator' && <ImageGenerator />}
-        {activeTab === 'chat' && <Chat />}
-        {activeTab === 'recipe-generator' && <RecipeGenerator />}
-      </div>
-
+      <main className="mx-auto max-w-7xl px-6 py-10">
+        {activeTab === "home" && <Landing setActiveTab={setActiveTab} />}
+        {activeTab === "image-generator" && <ImageGenerator />}
+        {activeTab === "chat" && <Chat />}
+        {activeTab === "recipe-generator" && <RecipeGenerator />}
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
