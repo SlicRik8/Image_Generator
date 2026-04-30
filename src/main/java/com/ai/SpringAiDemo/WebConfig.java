@@ -17,7 +17,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 WebMvcConfigurer.super.addCorsMappings(registry);
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("http://localhost:5173","https://image-generator-t1na.vercel.app")
                         .allowedMethods("GET","POST","DELETE","OPTIONS")
                         .allowedHeaders("*") //allows all
                         .allowCredentials(true);
