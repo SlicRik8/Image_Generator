@@ -11,7 +11,7 @@ function ImageGenerator() {
       setLoading(true);
       setImage(null);
       const response = await axios.get(
-        `http://localhost:8080/generate-image?prompt=${prompt}`,
+        `${import.meta.env.VITE_API_BASE_URL}/generate-image?prompt=${prompt}`,
         { responseType: "text" }
       );
       setImage(`data:image/jpeg;base64,${response.data}`);

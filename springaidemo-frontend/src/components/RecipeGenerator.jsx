@@ -13,7 +13,7 @@ function RecipeGenerator() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:8080/create-recipe?ingredients=${ingredients}&cuisine=${cuisine}&dietaryRestrictions=${dietaryRestrictions}`
+        `${import.meta.env.VITE_API_BASE_URL}/create-recipe?ingredients=${ingredients}&cuisine=${cuisine}&dietaryRestrictions=${dietaryRestrictions}`
       );
       setRecipe(response.data);
     } catch (error) {

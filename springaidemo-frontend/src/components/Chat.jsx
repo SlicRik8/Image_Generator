@@ -11,7 +11,7 @@ function Chat() {
       setLoading(true);
       setResponse("");
       const res = await axios.get(
-        `http://localhost:8080/ask-ai-options?prompt=${prompt}`
+        `${import.meta.env.VITE_API_BASE_URL}/ask-ai-options?prompt=${prompt}`
       );
       setResponse(res.data);
     } catch (error) {
